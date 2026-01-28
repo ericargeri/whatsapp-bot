@@ -1,9 +1,23 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 
 const app = express();
 
+// Permite receber JSON (o WhatsApp envia JSON)
+app.use(bodyParser.json());
+
+// Rota simples para teste no navegador
 app.get('/', (req, res) => {
-  res.send('Bot WhatsApp rodando 🚀');
+  res.send('Servidor do WhatsApp está online 🚀');
+});
+
+// 🔥 ROTA QUE O WHATSAPP VAI CHAMAR
+app.post('/webhook', (req, res) => {
+  console.log('Mensagem recebida do WhatsApp:');
+  console.log(JSON.stringify(req.body, null, 2));
+
+  // IMPORTANTE: responder 200 para o WhatsApp
+  res.sendStatus(200);
 });
 
 const PORT = process.env.PORT || 3000;
