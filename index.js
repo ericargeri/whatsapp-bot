@@ -10,6 +10,21 @@ app.use(bodyParser.json());
 app.get('/', (req, res) => {
   res.send('Servidor do WhatsApp está online 🚀');
 });
+// 🔐 Endpoint de verificação do WhatsApp (Meta)
+app.get('/webhook', (req, res) => {
+  const VERIFY_TOKEN = 'verifica123';
+
+  const mode = req.query['hub.mode'];
+  const token = req.query['hub.verify_token'];
+  const challenge = req.query['hub.challenge'];
+
+  if (mode === 'subscribe' && token === VERIFY_TOKEN) {
+    console.log('Webhook verificado com sucesso!');
+    res.status(200).send(challenge);
+  } else {
+    res.sendStatus(403);
+  }
+});
 
 // 🔥 ROTA QUE O WHATSAPP VAI CHAMAR
 app.post('/webhook', (req, res) => {
